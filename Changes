@@ -1,4 +1,9 @@
 Revision history for Perl extension Perl::Signature
 
+0.02  Mon Feb  7 2005
+	- Upgraded to the beta PPI code
+	- API changed quite a bit
+	- Added instantiable usage
+
 0.01  Mon Sep 22 2004
 	- Created the initial implementation
