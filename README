@@ -1,0 +1,78 @@
+NAME
+    Perl::Signature - Generate functional signatures for perl code
+
+  DESCRIPTION
+    A large part of the work in creating Perl::Compare was put into it's
+    method for "normalizing" perl code as far as possible.
+
+    However, the main problem in working with these normalised files is that
+    we need to do a relatively expensive deep compare of a very large data
+    structure.
+
+    Perl::Signature attempts to resolve this problem by taking the
+    normalized perl document, serialising it via a standard serialization
+    mechanism, and then digesting it down to a single 128-bit signature.
+
+    This is a fairly expensive process, mainly because it involves a full
+    PPI parse round, the normalization process, serialization, and
+    digesting.
+
+    But, having done it for a file once, you can do a direct comparison to
+    the functional signature of any other file, and if they match, then it's
+    a pretty safe bet they are functionally the same.
+
+  Avoid Changes in the Calculation
+    Perl::Signature is relatively sensitive. Because any file goes through 4
+    stages, any of which could change in structure with an upgrade, you
+    should ensure that all signatures are generated with the same versions
+    of PPI, Perl::Compare and the same set of Perl::Compare plugins
+    installed.
+
+METHODS
+    Because most of the work is done elsewhere, all the methods are one-shot
+    methods. They will all either return a 32 character hexidecimal MD5
+    hash, or "undef".
+
+  file $filename
+    The "file" method does the whole deal. Load a file, parse it, normalize,
+    serialize and digest. It actually happens in several parts. "file" just
+    loads the file and passes it on to "source".
+
+    Returns a 32 character hexidecimal MD5 signature.
+
+  source $content | \$content
+    The "source" takes perl source code as either a plain string or a
+    reference to a SCALAR. Parses the content and hands the PPI::Document
+    object off to "Document".
+
+    Returns a 32 character hexidecimal MD5 signature.
+
+  Document
+    The "Document" method takes a PPI::Document object and does the final
+    nomalize + serialize + digest steps.
+
+    Returns a 32 character hexidecimal MD5 signature.
+
+TO DO
+    - Write unit tests
+
+    - Test test test
+
+SUPPORT
+    All bugs should be filed via the CPAN bug tracker at
+
+    <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Perl%3A%3ASignature>
+
+    For other issues, contact the author
+
+AUTHORS
+    Adam Kennedy (Maintainer), <http://ali.as/>, cpan@ali.as
+
+COPYRIGHT
+    Copyright (c) 2004 Adam Kennedy. All rights reserved. This program is
+    free software; you can redistribute it and/or modify it under the same
+    terms as Perl itself.
+
+    The full text of the license can be found in the LICENSE file included
+    with this module.
+

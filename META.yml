@@ -1,0 +1,20 @@
+name: Perl-Signature
+version: 0.01
+abstract: Create functional signatures for Perl documents
+author: Adam Kennedy<cpan@ali.as>
+license: perl
+distribution_type: module
+build_requires:
+  Test::More: 0.47
+  File::Spec: 0.82
+requires:
+  perl: 5.005
+  File::Slurp: 9999.04
+  PPI: 0.829
+  Perl::Compare: 0.07
+  Storable: 2.11
+  Digest::MD5: 2.30
+no_index:
+  directory:
+    - inc
+generated_by: Module::Install version 0.35
