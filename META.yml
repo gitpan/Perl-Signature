@@ -1,5 +1,5 @@
 name: Perl-Signature
-version: 0.03
+version: 0.04
 abstract: Generate functional signatures for Perl source code
 author: Adam Kennedy<cpan@ali.as>
 license: perl

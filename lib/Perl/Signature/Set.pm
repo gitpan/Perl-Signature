@@ -9,7 +9,7 @@ Perl::Signature::Set - Create, store and check groups of signatures
 =head1 DESCRIPTION
 
 There are a number of cases where you might want to create and look after
-a while bunch of signatures.
+a whole bunch of signatures.
 
 The most common of these is:
 
@@ -41,7 +41,7 @@ use Perl::Signature ();
 
 use vars qw{$VERSION $errstr};
 BEGIN {
-	$VERSION = '0.03';
+	$VERSION = '0.04';
 	$errstr  = '';
 }
 
@@ -116,6 +116,42 @@ sub add {
 	# Create the Signature object, and add it
 	my $Signature = Perl::Signature->new( $file ) or return undef;
 	$self->{files}->{$file} = $Signature;
+}
+
+=pod
+
+=head2 files
+
+The C<files> method provides all of the names of the files contained
+in the set, in default sorted order.
+
+Returns a list of file names, or the null list if the set contains no
+files.
+
+=cut
+
+sub files {
+	my $self  = shift;
+	my @files = sort keys %{$self->{files}};
+	@files;
+}
+
+=pod
+
+=head2 file $filename
+
+The C<file> method is used to get the L<Perl::Signature> object for a
+single named file.
+
+Returns a L<Perl::Signature> object, or C<undef> if the file is not in
+the set.
+
+=cut
+
+sub file {
+	my $self = shift;
+	my $file = defined $_[0] ? shift : return undef;
+	$self->{files}->{$file};
 }
 
 =pod
@@ -230,6 +266,10 @@ For other issues, or commercial enhancement or support, contact the author.
 =head1 AUTHORS
 
 Adam Kennedy (Maintainer), L<http://ali.as/>, cpan@ali.as
+
+=head1 SEE ALSO
+
+L<PPI>, L<Perl::Signature>, L<Perl::Compare>
 
 =head1 COPYRIGHT
 

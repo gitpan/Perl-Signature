@@ -1,5 +1,8 @@
 Revision history for Perl extension Perl::Signature
 
+0.04  Wed Feb  9 2005
+	- Added the ->files and ->file methods
+
 0.03  Tue Feb  8 2005
 	- Added Perl::Signature::Set
 

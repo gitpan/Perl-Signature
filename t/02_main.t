@@ -16,7 +16,7 @@ BEGIN {
 	}
 }
 
-use Test::More tests => 61;
+use Test::More tests => 77;
 use File::Copy;
 use Perl::Signature;
 use Perl::Signature::Set;
@@ -85,9 +85,17 @@ $Set = Perl::Signature::Set->new(1);
 isa_ok( $Set, 'Perl::Signature::Set' );
 $Set = Perl::Signature::Set->new;
 isa_ok( $Set, 'Perl::Signature::Set' );
-my @null_list = $Set->signatures;
-is_deeply( \@null_list, [], '->signatures returns correctly in list context' );
-my $null_list = $Set->signatures;
+my @null_list = $Set->files;
+is_deeply( \@null_list, [], '->files returns correctly in list context' );
+my $null_list = $Set->files;
+is( $null_list, 0, '->signatures returns correctly in scalar context' );
+is( $Set->file('foo'), undef, '->file(bad) returns undef' );
+is( $Set->file,        undef, '->file() returns undef' );
+is( $Set->file(undef), undef, '->file(undef) returns undef' );
+is( $Set->file([]),    undef, '->file(evil) returns undef' );
+@null_list = $Set->signatures;
+is_deeply( \@null_list, [], '->files returns correctly in list context' );
+$null_list = $Set->signatures;
 is( $null_list, 0, '->signatures returns correctly in scalar context' );
 
 # Add a known file
@@ -102,10 +110,15 @@ is( $rv->changed, '', '->changed returns true' );
 is( $rv->unchanged, 1, '->unchanged returns false' );
 
 # There should be only one file
-my @files = $Set->signatures;
+my @files = $Set->files;
+is( scalar(@files), 1, '->files returns one file' );
+is( $files[0], $basic, 'The one file is the one we added' );
+my $files = $Set->files;
+is( $files, 1, '->files returns one file' );
+@files = $Set->signatures;
 is( scalar(@files), 1, '->signatures returns one file' );
 isa_ok( $files[0], 'Perl::Signature' );
-my $files = $Set->signatures;
+$files = $Set->signatures;
 is( $files, 1, '->signatures returns one file' );
 
 # Try to add the same file
@@ -124,10 +137,20 @@ is( $rv->changed, '', '->changed returns true' );
 is( $rv->unchanged, 1, '->unchanged returns false' );
 
 # Now there should be two files
+@files = $Set->files;
+is( scalar(@files), 2, '->signatures returns one file' );
+is( $files[0], $basic, 'First item is the one expected' );
+is( $files[1], $object, 'Second item is the one expected' );
 @files = $Set->signatures;
 is( scalar(@files), 2, '->signatures returns one file' );
 isa_ok( $files[0], 'Perl::Signature' );
 isa_ok( $files[1], 'Perl::Signature' );
+
+# Set the ->file method
+isa_ok( $Set->file($basic), 'Perl::Signature' );
+isa_ok( $Set->file($object), 'Perl::Signature' );
+is( $Set->file($basic)->file, $basic, '->file returns expected Signature object' );
+is( $Set->file($object)->file, $object, '->file returns expected Signature object' );
 
 # Try the changes method with no changes
 my $changes = $Set->changes;
