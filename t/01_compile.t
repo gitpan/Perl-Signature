@@ -22,8 +22,11 @@ BEGIN {
 
 
 # Does everything load?
-use Test::More 'tests' => 2;
+use Test::More 'tests' => 3;
+
 ok( $] >= 5.005, 'Your perl is new enough' );
-use_ok('Perl::Signature');
+
+use_ok('Perl::Signature'     );
+use_ok('Perl::Signature::Set');
 
 1;

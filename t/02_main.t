@@ -16,9 +16,10 @@ BEGIN {
 	}
 }
 
-use Test::More tests => 23;
+use Test::More tests => 61;
 use File::Copy;
 use Perl::Signature;
+use Perl::Signature::Set;
 use PPI;
 
 my $basic   = catfile( 't.data', 'basic.pl'   );
@@ -50,6 +51,10 @@ open( FILE, ">$object" ) or die "Failed to open object file";
 print FILE 'my $foo = bar();';
 close FILE;
 
+END {
+	unlink $object if -f $object;
+}
+
 # Create the object
 my $Signature = Perl::Signature->new( $object );
 isa_ok( $Signature, 'Perl::Signature' );
@@ -73,8 +78,100 @@ isnt( $Signature->current, $Signature->original, '->current matches expected' );
 is( $Signature->changed, 1, '->changed returns true' );
 is( $Signature->unchanged, '', '->unchanged returns false' );
 
-END {
-	unlink $object if -f $object;
-}
+# Create and check a set
+my $Set = Perl::Signature::Set->new(undef);
+is( $Set, undef, '->new(undef) returns undef' );
+$Set = Perl::Signature::Set->new(1);
+isa_ok( $Set, 'Perl::Signature::Set' );
+$Set = Perl::Signature::Set->new;
+isa_ok( $Set, 'Perl::Signature::Set' );
+my @null_list = $Set->signatures;
+is_deeply( \@null_list, [], '->signatures returns correctly in list context' );
+my $null_list = $Set->signatures;
+is( $null_list, 0, '->signatures returns correctly in scalar context' );
+
+# Add a known file
+my $rv = $Set->add($basic);
+isa_ok( $rv, 'Perl::Signature' );
+is( $rv->file, $basic, '->file matches expected' );
+is( $rv->original, $docsig3, '->original matches expected' );
+is( length($rv->current), 32, '->current is a signature' );
+is( $rv->current, $docsig3, 'Signature matches expected' );
+is( $rv->current, $rv->original, '->current matches expected' );
+is( $rv->changed, '', '->changed returns true' );
+is( $rv->unchanged, 1, '->unchanged returns false' );
+
+# There should be only one file
+my @files = $Set->signatures;
+is( scalar(@files), 1, '->signatures returns one file' );
+isa_ok( $files[0], 'Perl::Signature' );
+my $files = $Set->signatures;
+is( $files, 1, '->signatures returns one file' );
+
+# Try to add the same file
+$rv = $Set->add($basic);
+is( $rv, undef, '->add for an existing file returns null' );
+
+# Add an additional known file
+$rv = $Set->add($object);
+my $docsig4 = Perl::Signature->source_signature( "print 'Hello World!';" );
+is( $rv->file, $object, '->file matches expected' );
+is( $rv->original, $docsig4, '->original matches expected' );
+is( length($rv->current), 32, '->current is a signature' );
+is( $rv->current, $docsig4, 'Signature matches expected' );
+is( $rv->current, $rv->original, '->current matches expected' );
+is( $rv->changed, '', '->changed returns true' );
+is( $rv->unchanged, 1, '->unchanged returns false' );
+
+# Now there should be two files
+@files = $Set->signatures;
+is( scalar(@files), 2, '->signatures returns one file' );
+isa_ok( $files[0], 'Perl::Signature' );
+isa_ok( $files[1], 'Perl::Signature' );
+
+# Try the changes method with no changes
+my $changes = $Set->changes;
+is( $changes, '', '->changes returns false with no changes' );
+
+# Change the second file
+open( FILE, ">$object" ) or die "Failed to open object file";
+print FILE 'my $foo = bar();';
+close FILE;
+
+# Now check for changes
+$changes = $Set->changes;
+is_deeply( $changes, { $object => 'changed' }, '->changes returns as expected after change' );
+
+# Next, delete the file
+unlink $object;
+$changes = $Set->changes;
+is_deeply( $changes, { $object => 'removed' }, '->changes returns as expected after deletion' );
+
+# Check the serialized form
+my $config = $Set->write_string;
+is( $config, <<"END_CONFIG", '->write_string returns as expected' );
+[files]
+$basic=$docsig1
+$object=$docsig4
+
+[signature]
+layer=1
+END_CONFIG
+
+# Do a round trip sanity check
+my $Set2 = Perl::Signature::Set->read_string( $config );
+isa_ok( $Set2, 'Perl::Signature::Set' );
+is_deeply( $Set, $Set2, 'Round trip check ok' );
+$changes = $Set->changes;
+is_deeply( $changes, { $object => 'removed' }, '->changes returns as expected after deletion' );
+
+# Do a write/read test
+ok( $Set->write( $object ), '->write works ok' );
+$Set2 = Perl::Signature::Set->read( $object );
+unlink $object;
+isa_ok( $Set2, 'Perl::Signature::Set' );
+is_deeply( $Set, $Set2, 'Round trip check ok' );
+$changes = $Set->changes;
+is_deeply( $changes, { $object => 'removed' }, '->changes returns as expected after deletion' );
 
 1;
