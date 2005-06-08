@@ -1,5 +1,8 @@
 Revision history for Perl extension Perl::Signature
 
+0.05 Wed May 25 2005
+	- Updated to handle API change at PPI 0.990
+
 0.04  Wed Feb  9 2005
 	- Added the ->files and ->file methods
 

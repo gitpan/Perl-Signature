@@ -28,7 +28,7 @@ my $object  = catfile( 't.data', 'object.pl'  );
 
 
 # Basics
-my $Document = PPI::Document->new('my $foo = bar();');
+my $Document = PPI::Document->new(\'my $foo = bar();');
 isa_ok( $Document, 'PPI::Document' );
 my $docsig1 = Perl::Signature->document_signature( $Document );
 ok( defined $docsig1, '->document_signature returns defined' );

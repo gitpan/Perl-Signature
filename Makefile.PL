@@ -2,7 +2,7 @@ use inc::Module::Install;
 
 name          ( 'Perl-Signature'            );
 abstract      ( 'Generate functional signatures for Perl source code' );
-author        ( 'Adam Kennedy<cpan@ali.as>' );
+author        ( 'Adam Kennedy <cpan@ali.as>' );
 version_from  ( 'lib/Perl/Signature.pm'     );
 license       ( 'perl'                      );
 
@@ -10,7 +10,7 @@ requires      ( 'perl'          => '5.005'  );
 requires      ( 'Storable'      => '2.11'   );
 requires      ( 'Digest::MD5'   => '2.30'   );
 requires      ( 'Config::Tiny'  => '2.00'   );
-requires      ( 'PPI'           => '0.902'  );
+requires      ( 'PPI'           => '0.990'  );
 
 build_requires( 'Test::More'    => '0.47'   );
 build_requires( 'File::Spec'    => '0.82'   );

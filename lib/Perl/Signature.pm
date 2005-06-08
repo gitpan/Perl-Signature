@@ -8,16 +8,16 @@ Perl::Signature - Generate functional signatures for Perl source code
 
 =head2 DESCRIPTION
 
-In early beta, PPI introduced the concept of "Document Normalization" into
-the core. It had previously only been implemented "behind the scenes" as
-part of L<Perl::Compare>.
+In early beta, L<PPI> introduced the concept of "Document Normalization"
+into the core. It had previously only been implemented "behind the scenes"
+as part of L<Perl::Compare>.
 
 Unfortunately, there isn't a whole lot of things you can do with a
 L<PPI::Document::Normalized> object. It's a giant twisty mass of objects
 and perl structure, and not very practical for long term storage.
 
-Perl::Signature implements the idea of a "functional signature" for Perl
-documents, implemented in a similar way to L<Object::Signature>.
+L<Perl::Signature> implements the idea of a "functional signature" for
+Perl documents, implemented in a similar way to L<Object::Signature>.
 
 The normalized document is serialized to a string with L<Storable>, then
 this string is converted into a MD5 hash, producing a single short string
@@ -56,7 +56,7 @@ use Digest::MD5   ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.04';
+	$VERSION = '0.05';
 }
 
 
@@ -80,7 +80,7 @@ Returns a 32 character hexidecimal MD5 signature, or C<undef> on error.
 sub file_signature {
 	my $class    = ref $_[0] ? ref shift : shift;
 	my $filename = -f $_[0] ? shift : return undef;
-	my $Document = PPI::Document->load( $filename ) or return undef;
+	my $Document = PPI::Document->new( $filename ) or return undef;
 	$class->document_signature( $Document );
 }
 
@@ -102,7 +102,7 @@ sub source_signature {
 	$source    = $$source if ref $source;
 
 	# Build the PPI::Document
-	my $Document = PPI::Document->new( $source ) or return undef;
+	my $Document = PPI::Document->new( \$source ) or return undef;
 	$class->document_signature( $Document );
 }
 
