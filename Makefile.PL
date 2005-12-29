@@ -1,24 +1,14 @@
 use inc::Module::Install;
 
-name          ( 'Perl-Signature'            );
-abstract      ( 'Generate functional signatures for Perl source code' );
-author        ( 'Adam Kennedy <cpan@ali.as>' );
-version_from  ( 'lib/Perl/Signature.pm'     );
-license       ( 'perl'                      );
+name           'Perl-Signature';
+all_from       'lib/Perl/Signature.pm';
+requires       'Storable'      => '2.11';
+requires       'Digest::MD5'   => '2.30';
+requires       'Config::Tiny'  => '2.00';
+requires       'PPI'           => '1.109';
+build_requires 'Test::More'    => '0.47';
+build_requires 'File::Spec'    => '0.80';
+no_index       directory       => 't.data';
 
-requires      ( 'perl'          => '5.005'  );
-requires      ( 'Storable'      => '2.11'   );
-requires      ( 'Digest::MD5'   => '2.30'   );
-requires      ( 'Config::Tiny'  => '2.00'   );
-requires      ( 'PPI'           => '0.990'  );
-
-build_requires( 'Test::More'    => '0.47'   );
-build_requires( 'File::Spec'    => '0.82'   );
-
-# Our test data might contain valid-looking modules.
-# Don't index anything in the test data directory.
-no_index      ( directory       => 't.data' );
-
-auto_install();
-
-&WriteAll;
+auto_install;
+WriteAll;

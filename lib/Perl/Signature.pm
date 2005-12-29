@@ -48,15 +48,16 @@ PPI::Signature provides two sets of methods. A set of
 
 =cut
 
+use 5.005;
 use strict;
-use UNIVERSAL 'isa';
 use PPI           ();
+use PPI::Util     '_Document';
 use Storable      ();
 use Digest::MD5   ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.05';
+	$VERSION = '0.07';
 }
 
 
@@ -79,7 +80,7 @@ Returns a 32 character hexidecimal MD5 signature, or C<undef> on error.
 
 sub file_signature {
 	my $class    = ref $_[0] ? ref shift : shift;
-	my $filename = -f $_[0] ? shift : return undef;
+	my $filename = -f $_[0]  ? shift : return undef;
 	my $Document = PPI::Document->new( $filename ) or return undef;
 	$class->document_signature( $Document );
 }
@@ -119,7 +120,7 @@ Returns a 32 character hexidecimal MD5 signature, or C<undef> on error.
 
 sub document_signature {
 	my $class    = ref $_[0] ? ref shift : shift;
-	my $Document = isa(ref $_[0], 'PPI::Document') ? shift : return undef;
+	my $Document = _Document(shift) or return undef;
 
 	# Normalize the PPI::Document
 	my $Normalized = $Document->normalized or return undef;

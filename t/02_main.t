@@ -16,7 +16,7 @@ BEGIN {
 	}
 }
 
-use Test::More tests => 77;
+use Test::More tests => 79;
 use File::Copy;
 use Perl::Signature;
 use Perl::Signature::Set;
@@ -26,14 +26,21 @@ my $basic   = catfile( 't.data', 'basic.pl'   );
 my $changed = catfile( 't.data', 'changed.pl' );
 my $object  = catfile( 't.data', 'object.pl'  );
 
+# Apparently "somewhere near Perl::Signature" we don't localise $_
+# Test this. See Regression tests at bottom for actual check.
+$_ = 1234;
 
 # Basics
 my $Document = PPI::Document->new(\'my $foo = bar();');
 isa_ok( $Document, 'PPI::Document' );
+
 my $docsig1 = Perl::Signature->document_signature( $Document );
+is( $_, 1234, '$_ is unchanged after much stuff' );
+
 ok( defined $docsig1, '->document_signature returns defined' );
 is( length($docsig1), 32, '->document_signature returns a 32 char thing' );
 ok( $docsig1 =~ /^[abcdef01234567890]{32}$/, 'Signature is a hexidecimal string' );
+
 
 my $source = ' my $foo= bar(); # comment';
 my $docsig2 = Perl::Signature->source_signature( $source );
@@ -82,6 +89,8 @@ is( $Signature->unchanged, '', '->unchanged returns false' );
 my $Set = Perl::Signature::Set->new(undef);
 is( $Set, undef, '->new(undef) returns undef' );
 $Set = Perl::Signature::Set->new(1);
+isa_ok( $Set, 'Perl::Signature::Set' );
+$Set = Perl::Signature::Set->new(2);
 isa_ok( $Set, 'Perl::Signature::Set' );
 $Set = Perl::Signature::Set->new;
 isa_ok( $Set, 'Perl::Signature::Set' );
@@ -196,5 +205,16 @@ isa_ok( $Set2, 'Perl::Signature::Set' );
 is_deeply( $Set, $Set2, 'Round trip check ok' );
 $changes = $Set->changes;
 is_deeply( $changes, { $object => 'removed' }, '->changes returns as expected after deletion' );
+
+
+
+
+
+#####################################################################
+# Regressions Tests
+
+# rt.cpan.org: Ticket #16671 $_ is not localized 
+
+# is( $_, 1234, '$_ is unchanged after much stuff' );
 
 1;

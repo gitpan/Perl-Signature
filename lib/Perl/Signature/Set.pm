@@ -35,13 +35,12 @@ implemented as a subclass of L<Config::Tiny>.
 =cut
 
 use strict;
-use UNIVERSAL 'isa';
 use base 'Config::Tiny';
 use Perl::Signature ();
 
 use vars qw{$VERSION $errstr};
 BEGIN {
-	$VERSION = '0.05';
+	$VERSION = '0.07';
 	$errstr  = '';
 }
 
@@ -65,12 +64,12 @@ Returns a new Perl::Signature::Set object.
 
 sub new {
 	my $class = ref $_[0] ? ref shift : shift;
-	my $layer = @_ ? (defined $_[0] and $_[0] eq '1') ? shift : return undef : 1;
+	my $layer = @_ ? (defined $_[0] and $_[0] =~ /^[12]$/) ? shift : return undef : 1;
 
 	# Create the basic object
 	my $self = bless {
 		signature => {
-			layer => 1,
+			layer => $layer,
 			},
 		files => {},
 		}, $class;
