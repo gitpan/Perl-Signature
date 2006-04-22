@@ -8,7 +8,7 @@ requires       'Config::Tiny'  => '2.00';
 requires       'PPI'           => '1.109';
 build_requires 'Test::More'    => '0.47';
 build_requires 'File::Spec'    => '0.80';
-no_index       directory       => 't.data';
+build_requires 'File::Copy'    => 0;
 
 auto_install;
 WriteAll;

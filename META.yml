@@ -1,21 +1,22 @@
-abstract: Generate functional signatures for Perl source code
-author: 'Adam Kennedy (Maintainer), L<http://ali.as/>, cpan@ali.as'
-build_requires:
-  File::Spec: 0.80
-  Test::More: 0.47
-distribution_type: module
-generated_by: Module::Install version 0.50
-license: perl
-name: Perl-Signature
-no_index:
-  directory:
-    - t.data
+
+no_index: 
+  directory: 
     - inc
     - t
-requires:
-  Config::Tiny: 2.00
-  Digest::MD5: 2.30
+generated_by: Module::Install version 0.62
+distribution_type: module
+version: 0.08
+name: Perl-Signature
+author: Adam Kennedy <cpan@ali.as>
+license: perl
+build_requires: 
+  File::Copy: 0
+  Test::More: 0.47
+  File::Spec: 0.80
+requires: 
   PPI: 1.109
-  Storable: 2.11
   perl: 5.005
-version: 0.07
+  Digest::MD5: 2.30
+  Storable: 2.11
+  Config::Tiny: 2.00
+abstract: Generate functional signatures for Perl source code

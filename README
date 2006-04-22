@@ -93,9 +93,6 @@ METHODS
     Returns true if the file is (functionally) unchanged, false if it has
     changed, or "undef" on error.
 
-TO DO
-    - Write Perl::Signature::Set, to handle multiple signatures
-
 SUPPORT
     All bugs should be filed via the CPAN bug tracker at
 
@@ -105,10 +102,13 @@ SUPPORT
     author.
 
 AUTHORS
-    Adam Kennedy (Maintainer), <http://ali.as/>, cpan@ali.as
+    Adam Kennedy <cpan@ali.as>
+
+SEE ALSO
+    <http://ali.as/>, PPI
 
 COPYRIGHT
-    Copyright (c) 2004 - 2005 Adam Kennedy. All rights reserved.
+    Copyright (c) 2004 - 2006 Adam Kennedy. All rights reserved.
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.

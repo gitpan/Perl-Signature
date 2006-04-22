@@ -4,7 +4,6 @@
 
 use strict;
 use lib ();
-use UNIVERSAL 'isa';
 use File::Spec::Functions ':ALL';
 BEGIN {
 	$| = 1;
@@ -12,7 +11,11 @@ BEGIN {
 		require FindBin;
 		$FindBin::Bin = $FindBin::Bin; # Avoid a warning
 		chdir catdir( $FindBin::Bin, updir() );
-		lib->import('blib', 'lib');
+		lib->import(
+			catdir('blib', 'arch'),
+			catdir('blib', 'lib' ),
+			catdir('lib'),
+			);
 	}
 }
 
@@ -22,9 +25,9 @@ use Perl::Signature;
 use Perl::Signature::Set;
 use PPI;
 
-my $basic   = catfile( 't.data', 'basic.pl'   );
-my $changed = catfile( 't.data', 'changed.pl' );
-my $object  = catfile( 't.data', 'object.pl'  );
+my $basic   = catfile( 't', 'data', 'basic.pl'   );
+my $changed = catfile( 't', 'data', 'changed.pl' );
+my $object  = catfile( 't', 'data', 'object.pl'  );
 
 # Apparently "somewhere near Perl::Signature" we don't localise $_
 # Test this. See Regression tests at bottom for actual check.

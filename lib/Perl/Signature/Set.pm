@@ -40,7 +40,7 @@ use Perl::Signature ();
 
 use vars qw{$VERSION $errstr};
 BEGIN {
-	$VERSION = '0.07';
+	$VERSION = '0.08';
 	$errstr  = '';
 }
 
@@ -264,15 +264,15 @@ For other issues, or commercial enhancement or support, contact the author.
 
 =head1 AUTHORS
 
-Adam Kennedy (Maintainer), L<http://ali.as/>, cpan@ali.as
+Adam Kennedy E<lt>cpan@ali.asE<gt>
 
 =head1 SEE ALSO
 
-L<PPI>, L<Perl::Signature>, L<Perl::Compare>
+L<http://ali.as/>, L<PPI>, L<Perl::Signature>, L<Perl::Compare>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005 Adam Kennedy. All rights reserved.
+Copyright (c) 2005 - 2006 Adam Kennedy. All rights reserved.
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.
