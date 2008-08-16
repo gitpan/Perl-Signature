@@ -57,7 +57,7 @@ use Digest::MD5   ();
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.08';
+	$VERSION = '1.09';
 }
 
 
@@ -259,7 +259,7 @@ For other issues, or commercial enhancement or support, contact the author.
 
 =head1 AUTHORS
 
-Adam Kennedy E<lt>cpan@ali.asE<gt>
+Adam Kennedy E<lt>adamk@cpan.orgE<gt>
 
 =head1 SEE ALSO
 
@@ -267,7 +267,7 @@ L<http://ali.as/>, L<PPI>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2004 - 2006 Adam Kennedy. All rights reserved.
+Copyright 2004 - 2008 Adam Kennedy.
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.
